@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 5000;
         req,
         res,
         // @ts-ignore
-        user: req.cookies.accesstoken
+        user: req?.cookies.accesstoken
           ? (jwt.verify(
               req.cookies.accesstoken,
               process.env.JWT_SECRET ?? ""
