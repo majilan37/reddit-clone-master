@@ -43,6 +43,7 @@ function Subreddit() {
                 key={post._id}
                 post={post}
                 topic={data?.subreddit?.topic!}
+                className="!max-w-5xl"
               />
             ))}
           </>

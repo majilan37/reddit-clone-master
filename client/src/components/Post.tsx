@@ -108,7 +108,7 @@ function Post({
   console.log(hasVoted);
 
   return (
-    <div className={`max-w-2xl flex bg-gray-50 border ${className} `}>
+    <div className={`max-w-2xl flex w-full bg-gray-50 border ${className} `}>
       <div className="flex flex-col items-center p-5 space-y-2">
         <ArrowUpIcon
           onClick={() => addVote(true)}
@@ -126,8 +126,8 @@ function Post({
           } `}
         />
       </div>
-      <Link to={`/post/${post?._id}`}>
-        <div className=" bg-white flex-grow p-3 space-y-2 ">
+      <Link className="w-full flex-grow" to={`/post/${post?._id}`}>
+        <div className=" bg-white  p-3 space-y-2 ">
           <div className="flex items-center gap-2">
             <Avatar />
             <div className="">
