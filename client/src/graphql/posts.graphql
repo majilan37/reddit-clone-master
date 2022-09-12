@@ -1,0 +1,17 @@
+query posts {
+  posts {
+    _id
+    title
+    image
+    body
+    user {
+      _id
+      username
+    }
+    subredditList {
+      _id
+      topic
+    }
+    createdAt
+  }
+}

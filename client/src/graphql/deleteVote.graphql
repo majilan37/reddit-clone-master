@@ -1,0 +1,5 @@
+mutation deleteVote($id: String!) {
+  deleteVote(input: { _id: $id }) {
+    _id
+  }
+}

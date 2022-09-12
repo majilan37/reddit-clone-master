@@ -1,0 +1,24 @@
+mutation createPost(
+  $title: String!
+  $body: String!
+  $topic: String!
+  $image: String
+) {
+  createPost(
+    input: { title: $title, body: $body, topic: $topic, image: $image }
+  ) {
+    _id
+    title
+    image
+    body
+    user {
+      _id
+      username
+    }
+    subredditList {
+      topic
+      _id
+    }
+    createdAt
+  }
+}

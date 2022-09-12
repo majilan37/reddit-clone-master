@@ -1,0 +1,21 @@
+fragment PostInfo on Post {
+  _id
+  title
+  body
+  image
+  user {
+    _id
+    username
+  }
+  createdAt
+}
+
+query subreddit($topic: String!) {
+  subreddit(input: { topic: $topic }) {
+    _id
+    topic
+    posts {
+      ...PostInfo
+    }
+  }
+}

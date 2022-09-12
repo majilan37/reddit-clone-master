@@ -1,0 +1,6 @@
+mutation createSubreddit($topic: String!) {
+  createSubreddit(input: { topic: $topic }) {
+    _id
+    topic
+  }
+}

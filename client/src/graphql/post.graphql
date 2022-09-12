@@ -1,0 +1,27 @@
+query post($id: String!) {
+  post(input: { _id: $id }) {
+    _id
+    title
+    image
+    body
+    user {
+      _id
+      username
+    }
+    subredditList {
+      _id
+      topic
+    }
+    comments {
+      _id
+      text
+      user {
+        _id
+        username
+      }
+
+      createdAt
+    }
+    createdAt
+  }
+}

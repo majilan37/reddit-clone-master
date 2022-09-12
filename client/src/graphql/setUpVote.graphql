@@ -1,0 +1,10 @@
+mutation setUpVote($postId: String!, $upvote: Boolean!) {
+  setUpVote(input: { postId: $postId, upvote: $upvote }) {
+    _id
+    upvote
+    user {
+      _id
+      username
+    }
+  }
+}

@@ -1,0 +1,9 @@
+query votesForPost($postId: String!) {
+  votesForPost(input: { postId: $postId }) {
+    _id
+    upvote
+    user {
+      _id
+    }
+  }
+}

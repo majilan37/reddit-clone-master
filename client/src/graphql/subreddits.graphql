@@ -1,0 +1,6 @@
+query subreddits {
+  subreddits {
+    topic
+    _id
+  }
+}
