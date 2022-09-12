@@ -1,6 +1,6 @@
 import { mongoose } from "@typegoose/typegoose";
 import express from "express";
-import { graphqlHTTP } from "express-graphql";
+import { graphqlHTTP, Request } from "express-graphql";
 import { buildSchema } from "type-graphql";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
@@ -8,6 +8,7 @@ import { Context } from "./types";
 import jwt from "jsonwebtoken";
 import { User } from "./schema/user";
 import path from "path";
+// import { ApolloServer } from "apollo-server";
 dotenv.config();
 
 // * App config
@@ -27,7 +28,7 @@ const PORT = process.env.PORT || 5000;
   app.use(cookieParser());
   app.use(
     "/api/__graphql",
-    graphqlHTTP((req, res, graphQLParams) => ({
+    graphqlHTTP((req: Request, res, graphQLParams) => ({
       schema,
       graphiql: process.env.NODE_ENV !== "production",
       context: {
