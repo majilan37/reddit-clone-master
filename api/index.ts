@@ -1,6 +1,5 @@
 import { mongoose } from "@typegoose/typegoose";
 import express from "express";
-import { graphqlHTTP, Request } from "express-graphql";
 import { buildSchema } from "type-graphql";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
@@ -8,14 +7,18 @@ import { Context } from "./types";
 import jwt from "jsonwebtoken";
 import { User } from "./schema/user";
 import path from "path";
-// import { ApolloServer } from "apollo-server";
+import { ApolloServer } from "apollo-server-express";
+import {
+  ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginLandingPageProductionDefault,
+} from "apollo-server-core";
 dotenv.config();
 
-// * App config
-const app = express();
-const PORT = process.env.PORT || 5000;
-
 (async () => {
+  // * App config
+  const app = express();
+  const PORT = process.env.PORT || 5000;
+
   // * Create a schema
   const schema = await buildSchema({
     resolvers: [__dirname + "/resolvers/*.ts"],
@@ -24,32 +27,34 @@ const PORT = process.env.PORT || 5000;
     },
   });
 
+  // * Create Apollo Server
+  const server = new ApolloServer({
+    schema,
+    context: (ctx: Context) => {
+      if (ctx.req.cookies.accesstoken) {
+        const user = jwt.verify(
+          ctx.req.cookies.accesstoken,
+          process.env.JWT_SECRET || ""
+        ) as User;
+        // console.log(user);
+        ctx.user = user;
+      }
+      return ctx;
+    },
+    plugins: [
+      process.env.NODE_ENV === "production"
+        ? ApolloServerPluginLandingPageProductionDefault
+        : ApolloServerPluginLandingPageGraphQLPlayground,
+    ],
+    cache: "bounded",
+  });
+
+  // * Start Server
+  await server.start();
+
   // * Middleware
   app.use(cookieParser());
-  app.use(
-    "/api/__graphql",
-    graphqlHTTP((req: Request, res, graphQLParams) => ({
-      schema,
-      graphiql: process.env.NODE_ENV !== "production",
-      context: {
-        req,
-        res,
-        // @ts-ignore
-        user: req?.cookies.accesstoken
-          ? (jwt.verify(
-              req.cookies.accesstoken,
-              process.env.JWT_SECRET ?? ""
-            ) as User)
-          : null,
-      },
-      customFormatErrorFn: (error) => ({
-        message: error.message,
-        locations: error.locations,
-        stack: error.stack,
-        path: error.path,
-      }),
-    }))
-  );
+  server.applyMiddleware({ app, path: "/api/__graphql" });
 
   // * Serve client
   if (process.env.NODE_ENV === "production") {
@@ -75,5 +80,3 @@ const PORT = process.env.PORT || 5000;
     console.log(`Server started on port ${PORT}`);
   });
 })();
-
-export default app;
