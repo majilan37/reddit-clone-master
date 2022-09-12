@@ -36,7 +36,6 @@ dotenv.config();
           ctx.req.cookies.accesstoken,
           process.env.JWT_SECRET || ""
         ) as User;
-        // console.log(user);
         ctx.user = user;
       }
       return ctx;
