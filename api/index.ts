@@ -33,6 +33,7 @@ const PORT = process.env.PORT || 5000;
       context: {
         req,
         res,
+        // @ts-ignore
         user: req.cookies.accesstoken
           ? (jwt.verify(
               req.cookies.accesstoken,
