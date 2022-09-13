@@ -10,6 +10,7 @@ import {
 import Button from "./Button";
 import { useStateProvider } from "../context/StateProvider";
 import { SubredditsDocument } from "../generated/graphql";
+import { toast } from "react-hot-toast";
 
 type FormValues = Pick<PostsQuery["posts"][0], "title" | "image" | "body"> & {
   topic: string;
@@ -29,6 +30,7 @@ function Form({ subreddit }: { subreddit?: boolean }) {
 
   // * Create post
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    if (!user) return toast.error("Sign in to create a post");
     await createPost({
       variables: {
         ...data,
@@ -83,8 +85,9 @@ function Form({ subreddit }: { subreddit?: boolean }) {
           </div>
           <Button
             type="submit"
-            className="bg-blue-600 !mt-3 text-white "
+            className="bg-blue-600 !mt-3 text-white disabled:bg-gray-300 disabled:cursor-not-allowed "
             loading={loading}
+            disabled={!user}
             text="Create Post"
           />
         </div>

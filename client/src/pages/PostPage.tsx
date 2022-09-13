@@ -66,8 +66,9 @@ function PostPage() {
               }
               rows={10}></textarea>
             <Button
-              className="bg-orange-500 self-end"
+              className="bg-orange-500 self-end disabled:bg-gray-300 disabled:cursor-not-allowed "
               type="submit"
+              disabled={!user}
               loading={createCommentLoading}>
               {createCommentLoading ? "Loading..." : "Add comment"}
             </Button>
