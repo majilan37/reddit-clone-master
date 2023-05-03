@@ -31,32 +31,37 @@ function Login() {
   const [loginUser, { loading, data: user, error }] = useLoginUserMutation();
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     console.log("clicked");
-    dispatch({
-      type: "SET_LOADING",
-      payload: loading,
-    });
+    // dispatch({
+    //   type: "SET_LOADING",
+    //   payload: loading,
+    // });
 
-    if (error || !user) {
-      console.log(error);
-      toast.error("Email or password incorrect");
-    }
+    console.log("error => ", error);
 
     await loginUser({
       variables: {
         email: data.email,
         password: data.password,
       },
-    }).then(() => {
-      if (user?.login) {
-        dispatch({
-          type: "SET_USER",
-          payload: user?.login as User,
-        });
+    })
+      .then((res) => {
+        if (error) {
+          toast.error(error?.message);
+          console.log(error);
+          return;
+        }
+        res.data?.login &&
+          dispatch({
+            type: "SET_USER",
+            payload: res.data?.login as User,
+          });
 
-        localStorage.setItem("reddit_user", JSON.stringify(user?.login));
-        navigate("/");
-      }
-    });
+        res.data?.login &&
+          localStorage.setItem("reddit_user", JSON.stringify(res.data?.login));
+
+        res.data?.login && navigate("/");
+      })
+      .catch((err) => toast.error(err?.message));
   };
 
   return (
@@ -85,7 +90,7 @@ function Login() {
         />
         <Button
           type="submit"
-          className="!bg-orange-600"
+          className="bg-orange-600"
           loading={loading}
           text="Login"
         />

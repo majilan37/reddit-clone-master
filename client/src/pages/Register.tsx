@@ -4,6 +4,7 @@ import { useCreateUserMutation } from "../generated/graphql";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
+import { toast } from "react-hot-toast";
 
 type FormValues = {
   username: string;
@@ -26,15 +27,20 @@ function Register() {
   password.current = watch("password", "");
 
   // * Mutation
-  const [reagisterUser, { loading }] = useCreateUserMutation();
+  const [registerUser, { loading, error }] = useCreateUserMutation();
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await reagisterUser({
+    await registerUser({
       variables: {
         email: data.email,
         username: data.username,
         password: data.password,
       },
     });
+
+    if (error) {
+      toast.error("Error occurred");
+      return;
+    }
 
     navigate("/login");
   };
@@ -43,7 +49,7 @@ function Register() {
     <div className="flex flex-col justify-center py-5 px-4 h-screen bg-gray-100 space-y-5">
       <img
         className="h-52 object-contain "
-        src="https://links.papareact.com/fqy"
+        src="https://logodownload.org/wp-content/uploads/2018/02/reddit-logo.png"
         alt=""
       />
       <form

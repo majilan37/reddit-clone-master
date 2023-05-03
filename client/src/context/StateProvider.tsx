@@ -6,12 +6,12 @@ const useAppReducer = (reducer: Reducer, initialState: InitialState) =>
   React.useReducer(reducer, initialState);
 
 type State = ReturnType<typeof useAppReducer>[0];
-type Dispach = ReturnType<typeof useAppReducer>[1];
+type Dispatch = ReturnType<typeof useAppReducer>[1];
 
 const state = {} as State;
-const dispatch: Dispach = (value) => {};
+const dispatch: Dispatch = (value) => {};
 
-type ContextType = [state: State, dispatch: Dispach];
+type ContextType = [state: State, dispatch: Dispatch];
 
 const StateContext = React.createContext<ContextType>([state, dispatch]);
 

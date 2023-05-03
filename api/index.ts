@@ -46,6 +46,9 @@ dotenv.config();
         : ApolloServerPluginLandingPageGraphQLPlayground,
     ],
     cache: "bounded",
+    formatError: (err) => ({
+      message: err.message,
+    }),
   });
 
   // * Start Server

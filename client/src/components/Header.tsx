@@ -25,7 +25,7 @@ function Header() {
       payload: null,
     });
 
-    localStorage.removeItem("user");
+    localStorage.removeItem("reddit_user");
     navigate("/login");
   };
   return (
